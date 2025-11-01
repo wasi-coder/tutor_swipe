@@ -1,0 +1,86 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+    <h3>Incoming Likes</h3>
+    {% if incoming_swipes %}
+      <ul class="list-group">
+        {% for swipe in incoming_swipes %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ swipe.from_user.username }}</strong>
+              <div class="small">{{ swipe.from_user.profile.subjects }} · {{ swipe.from_user.profile.location }}</div>
+            </div>
+            <div>
+              <button class="btn btn-sm btn-success me-2 accept-btn" data-user-id="{{ swipe.from_user.id }}">Accept</button>
+              <button class="btn btn-sm btn-danger reject-btn" data-user-id="{{ swipe.from_user.id }}">Reject</button>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="alert alert-info">No incoming likes yet.</div>
+    {% endif %}
+  </div>
+  <div class="col-md-4">
+    <h4>Your Settings</h4>
+    <p>Auto-accept new likes:
+      <button id="toggle-auto" class="btn btn-sm {% if profile.auto_accept %}btn-success{% else %}btn-outline-secondary{% endif %}">
+        {% if profile.auto_accept %}ON{% else %}OFF{% endif %}
+      </button>
+    </p>
+
+    <h4 class="mt-4">Your Matches</h4>
+    <ul class="list-group">
+      {% for m in matches %}
+        <li class="list-group-item"><a href="{% url 'core:chat_view' m.id %}">Match with {{ m.student.username }}</a></li>
+      {% empty %}
+        <li class="list-group-item text-muted">No matches yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.accept-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const userId = btn.dataset.userId;
+      const resp = await fetch("{% url 'core:teacher_accept' %}", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRFToken': getCookie('csrftoken')},
+        body: `from_user_id=${userId}&action=accept`
+      });
+      const data = await resp.json();
+      if (data.status === 'accepted') location.reload();
+    });
+  });
+  document.querySelectorAll('.reject-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const userId = btn.dataset.userId;
+      const resp = await fetch("{% url 'core:teacher_accept' %}", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRFToken': getCookie('csrftoken')},
+        body: `from_user_id=${userId}&action=reject`
+      });
+      const data = await resp.json();
+      if (data.status === 'rejected') location.reload();
+    });
+  });
+
+  document.getElementById('toggle-auto').addEventListener('click', async () => {
+    const resp = await fetch("{% url 'core:toggle_auto_accept' %}", {
+      method: 'POST',
+      headers: {'X-CSRFToken': getCookie('csrftoken')}
+    });
+    const data = await resp.json();
+    location.reload();
+  });
+
+  function getCookie(name) {
+    const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+  }
+});
+</script>
+{% endblock %}

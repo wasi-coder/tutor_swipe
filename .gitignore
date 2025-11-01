@@ -1,0 +1,11 @@
+# Flutter & Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+android/key.properties
+ios/Runner/GoogleService-Info.plist
+android/app/google-services.json
+.firebase/
+.DS_Store

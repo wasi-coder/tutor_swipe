@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-md-4">
+    {% if profile.photo %}
+      <img src="{{ profile.photo.url }}" alt="" class="img-fluid rounded">
+    {% else %}
+      <img src="https://via.placeholder.com/300x300" class="img-fluid rounded">
+    {% endif %}
+  </div>
+  <div class="col-md-8">
+    <h2>{{ profile_user.get_full_name|default:profile_user.username }}</h2>
+    <p><strong>Role:</strong> {{ profile.get_role_display }}</p>
+    <p><strong>Subjects:</strong> {{ profile.subjects }}</p>
+    <p><strong>Rate:</strong> ৳{{ profile.rate }}</p>
+    <p>{{ profile.bio }}</p>
+  </div>
+</div>
+{% endblock %}

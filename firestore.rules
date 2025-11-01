@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /swipes/{studentId}/targets/{teacherId} {
+      allow create, update, delete: if request.auth != null && request.auth.uid == studentId;
+      allow read: if request.auth != null && (request.auth.uid == studentId || request.auth.uid == teacherId);
+    }
+
+    match /matches/{matchId} {
+      allow read: if request.auth != null && (resource.data.studentId == request.auth.uid || resource.data.teacherId == request.auth.uid);
+      allow create: if request.auth != null && (request.auth.uid == request.resource.data.studentId || request.auth.uid == request.resource.data.teacherId);
+      allow update, delete: if request.auth != null && (resource.data.studentId == request.auth.uid || resource.data.teacherId == request.auth.uid);
+    }
+
+    match /chats/{matchId}/messages/{messageId} {
+      allow read, create: if request.auth != null && isParticipant(matchId, request.auth.uid);
+      allow update, delete: if false;
+    }
+
+    match /reviews/{teacherId}/{reviewId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.studentId;
+      allow update, delete: if false;
+    }
+
+    function isParticipant(matchId, uid) {
+      return exists(/databases/$(database)/documents/matches/$(matchId))
+             && (get(/databases/$(database)/documents/matches/$(matchId)).data.studentId == uid
+                 || get(/databases/$(database)/documents/matches/$(matchId)).data.teacherId == uid);
+    }
+  }
+}

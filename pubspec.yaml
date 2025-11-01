@@ -1,0 +1,30 @@
+name: tutorswipe_v1
+description: TutorSwipe — Tinder-style app for students and teachers (starter)
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.0.5
+  firebase_core: ^2.10.0
+  firebase_auth: ^4.6.0
+  cloud_firestore: ^4.7.0
+  firebase_storage: ^11.0.0
+  firebase_messaging: ^14.3.0
+  swipable_stack: ^0.2.2
+  cached_network_image: ^3.2.3
+  intl: ^0.18.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/

@@ -1,0 +1,10 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 text-center">
+    <h1 class="mb-4">Welcome to TutorSwipe</h1>
+    <p class="lead">Find local teachers by swiping — simple and respectful.</p>
+    <p><a href="{% url 'core:register' %}" class="btn btn-primary">Get Started</a></p>
+  </div>
+</div>
+{% endblock %}

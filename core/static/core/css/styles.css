@@ -1,0 +1,6 @@
+body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+#card-stack { position: relative; height: 520px; }
+.swipe-card { position: absolute; width: 100%; transition: transform 0.25s ease, opacity 0.25s ease; cursor: grab; }
+.swipe-card .card { border-radius: 12px; overflow: hidden; }
+.swipe-card.top { z-index: 100; }
+.hidden { display: none; }

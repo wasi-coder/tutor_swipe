@@ -1,0 +1,16 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h3>Your Matches</h3>
+<div class="list-group">
+  {% for m in as_student %}
+    <a href="{% url 'core:chat_view' m.id %}" class="list-group-item list-group-item-action">
+      Student: {{ m.student.username }} — Teacher: {{ m.teacher.username }}
+    </a>
+  {% endfor %}
+  {% for m in as_teacher %}
+    <a href="{% url 'core:chat_view' m.id %}" class="list-group-item list-group-item-action">
+      Student: {{ m.student.username }} — Teacher: {{ m.teacher.username }}
+    </a>
+  {% endfor %}
+</div>
+{% endblock %}

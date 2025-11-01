@@ -1,0 +1,7 @@
+Django>=4.2
+djangorestframework>=3.14
+Pillow>=10.0
+django-crispy-forms>=2.1
+crispy-bootstrap5>=0.8
+channels>=4.0
+channels-redis>=4.0  # optional for production with Redis
